@@ -9,14 +9,13 @@
 </template>
 
 <script setup lang="ts">
-import type { SearchClient } from 'algoliasearch'
-import type { DocSearchProps } from 'docsearch'
+import type { DocSearchProps } from '@docsearch/react'
 
 const transformSearchClient: DocSearchProps['transformSearchClient'] = (searchClient) => {
   return {
     ...searchClient,
     search: debounce(searchClient.search, 5000)
-  } as SearchClient
+  } as any
 }
 
 function debounce (func: (...args: unknown[]) => unknown, wait = 100) {

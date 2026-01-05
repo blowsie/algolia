@@ -1,7 +1,5 @@
-
-import algoliasearch from 'algoliasearch'
+import { algoliasearch } from 'algoliasearch'
 import scraper from 'metadata-scraper'
-import type { SearchClient, SearchIndex } from 'algoliasearch'
 import type { MetaData } from 'metadata-scraper/lib/types'
 import type { Nuxt } from '@nuxt/schema'
 import type { ModuleOptions } from './../module'
@@ -108,24 +106,22 @@ export function createGenerateDoneHook (nuxt: Nuxt, options: ModuleOptions, page
     if (pages.length > 0 && options.crawler) {
       const { crawler: { apiKey, indexName }, applicationId } = options
       const client = algoliasearch(applicationId, apiKey)
-      const index = client.initIndex(indexName)
 
       await nuxt.callHook('crawler:index:before', {
         options,
         pages,
-        client,
-        index
+        client
       })
 
-      await index.replaceAllObjects(pages, {
-        autoGenerateObjectIDIfNotExist: true
+      await client.replaceAllObjects({
+        indexName,
+        objects: pages
       })
 
       await nuxt.callHook('crawler:index:after', {
         options,
         pages,
-        client,
-        index
+        client
       })
     }
   }
@@ -134,8 +130,8 @@ export function createGenerateDoneHook (nuxt: Nuxt, options: ModuleOptions, page
 export interface CrawlerHooks {
   'crawler:add:before': (arg: { route: string, html: string, meta: MetaData, page: CrawlerPage }) => void
   'crawler:add:after': (arg: { route: string, html: string, meta: MetaData, page: CrawlerPage }) => void
-  'crawler:index:before': (arg: { options: ModuleOptions, pages: CrawlerPage[], client: SearchClient, index: SearchIndex }) => void
-  'crawler:index:after': (arg: { options: ModuleOptions, pages: CrawlerPage[], client: SearchClient, index: SearchIndex }) => void
+  'crawler:index:before': (arg: { options: ModuleOptions, pages: CrawlerPage[], client: any }) => void
+  'crawler:index:after': (arg: { options: ModuleOptions, pages: CrawlerPage[], client: any }) => void
 }
 
 declare module '@nuxt/schema' {

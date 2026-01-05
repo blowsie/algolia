@@ -1,9 +1,8 @@
-import type { RecommendationsQuery, RecommendClient } from '@algolia/recommend'
 import { type ComputedRef, computed } from 'vue'
 import type { RequestOptionsObject, SearchResponse } from '../../types'
 import { useNuxtApp, useState } from '#imports'
 
-export type RecommendParams = { queries: RecommendationsQuery[] } & RequestOptionsObject
+export type RecommendParams = { queries: any[] } & RequestOptionsObject
 
 export type MultipleQueriesResponse<T> = {
   results: Array<SearchResponse<T>>;
@@ -16,16 +15,17 @@ export type UseAlgoliaRecommend<T> = {
 
 export function useAlgoliaRecommend<T> (key: string = ''): UseAlgoliaRecommend<T> {
   const { $algoliaRecommend } = useNuxtApp()
-  const algoliaRecommend: RecommendClient = $algoliaRecommend
+  const algoliaRecommend: any = $algoliaRecommend
 
-  if (!$algoliaRecommend) {
+  if (!algoliaRecommend) {
     throw new Error('`[@nuxtjs/algolia]` Cannot call useAlgoliaRecommend composable due to missing `algolia.recommend` option.')
   }
 
   const result = useState(`recommend-result${key ? '-' + key : ''}`, () => null)
 
   const get = async ({ queries, requestOptions }: RecommendParams) => {
-    result.value = await algoliaRecommend.getRecommendations<T>(queries, requestOptions)
+    // V5: getRecommendations({ requests: queries })
+    result.value = await algoliaRecommend.getRecommendations({ requests: queries, ...requestOptions })
 
     return result.value
   }

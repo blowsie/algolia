@@ -35,19 +35,16 @@
     "lint": "eslint --ext .js,.ts,.vue"
   },
   "dependencies": {
-    "@algolia/cache-in-memory": "^4.14.2",
     "@algolia/recommend": "^4.12.2",
-    "@algolia/requester-fetch": "^4.23.2",
-    "@algolia/requester-node-http": "^5.21.0",
-    "@nuxt/kit": "^3.7.0",
-    "algoliasearch": "^4.11.0",
+    "@nuxt/kit": "^3.15.0",
+    "algoliasearch": "^5.0.0",
     "defu": "^6.1.4",
     "exsolve": "^1.0.4",
     "instantsearch.css": "^7.4.5",
     "metadata-scraper": "^0.2.49",
     "mocked-exports": "^0.1.1",
     "storyblok-algolia-indexer": "^1.1.0",
-    "vue-instantsearch": "^4.3.2"
+    "vue-instantsearch": "^4.19.3"
   },
   "devDependencies": {
     "@docsearch/css": "^3.0.0",

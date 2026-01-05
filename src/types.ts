@@ -1,6 +1,5 @@
 import type { DocSearchTranslations } from '@docsearch/react'
 import type { InternalDocSearchHit, StoredDocSearchHit } from '@docsearch/react/dist/esm/types'
-import type { SearchIndex } from 'algoliasearch'
 
 export interface AlgoliaIndices {}
 
@@ -8,11 +7,6 @@ export type RequestOptionsObject = {
   // eslint-disable-next-line
   requestOptions?: RequestOptions & SearchOptions;
 }
-
-export type TypedSearchIndex<K extends keyof AlgoliaIndices> = {
-    // eslint-disable-next-line
-    readonly search: (...args: Parameters<SearchIndex['search']>) => Readonly<Promise<SearchResponse<AlgoliaIndices[K]>>>
-} & Omit<SearchIndex, 'search'>
 
 // Have to add some types manually as the imports are failing the build process of the module
 // Algolia types
@@ -46,6 +40,14 @@ export type SearchForFacetValuesResponse = {
    */
   processingTimeMS?: number;
 };
+
+export type TypedSearchIndex<K extends keyof AlgoliaIndices> = {
+    // eslint-disable-next-line
+    readonly search: (query: string, requestOptions?: RequestOptions & SearchOptions) => Readonly<Promise<SearchResponse<AlgoliaIndices[K]>>>
+    readonly searchForFacetValues: (facetName: string, facetQuery: string, requestOptions?: any) => Readonly<Promise<SearchForFacetValuesResponse>>
+}
+
+
 
 export declare type RequestOptions = {
   /**
